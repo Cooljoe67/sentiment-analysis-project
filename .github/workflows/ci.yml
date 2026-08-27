@@ -39,4 +39,4 @@ jobs:
 
       - name: Run prediction script
         run: |
-          python -u src/predict.py --model models/sentiment.joblib "Kept me on the edge of my seat"
+          python src/predict.py "Kept me on the edge of my seat"
