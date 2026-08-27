@@ -24,35 +24,36 @@ def predict_texts(
         probs = [None] * len(input_texts)
     return preds.astype(int).tolist(), probs
 
+def get_sentiment(label: int) -> str:
 
-def format_prediction_lines(
-        texts: list[str],
-        preds: list[int],
-        probs: list[float | None]
-) -> list[str]:
-    """Return tab-separated CLI output lines for each input text."""
-    lines: list[str] = []
-    for text, pred, prob in zip(texts, preds, probs):
-        if prob is None:
-            lines.append(f"{pred}\t{text}")
-        else:
-            lines.append(f"{pred}\t{prob:.3f}\t{text}")
-    return lines
+    """Convert numeric label to sentiment."""
+
+    return "positive" if label == 1 else "negative"
 
 
-def main(
-        model_path: str,
-        input_texts: list[str]
-) -> None:
-    classifier = load_model(model_path)
-    preds, probs = predict_texts(classifier, input_texts)
-    for line in format_prediction_lines(input_texts, preds, probs):
-        print(line)
+def predict_single_text(
+        classifier: Any,
+        text: str
+) -> dict[str, Any]:
+
+    """Predict sentiment for a single text."""
+
+    predictions, probabilities = predict_texts(
+        classifier,
+        [text]
+    )
+
+    return {
+        "text": text,
+        "sentiment": get_sentiment(predictions[0]),
+        "probability": probabilities[0]
+    }
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--model", default="models/sentiment.joblib")
-    parser.add_argument("text", nargs="+", help="One or more texts to score")
-    args = parser.parse_args()
-    main(model_path=args.model, input_texts=args.text)
+def print_prediction(result: dict[str, Any]) -> None:
+
+    """Print prediction result."""
+
+    print("Text:", result["text"])
+    print("Sentiment:", result["sentiment"])
+    print("Probability:", result["probability"])
