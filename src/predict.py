@@ -57,3 +57,24 @@ def print_prediction(result: dict[str, Any]) -> None:
     print("Text:", result["text"])
     print("Sentiment:", result["sentiment"])
     print("Probability:", result["probability"])
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Predict sentiment for a text."
+    )
+    parser.add_argument(
+        "text",
+        help="Text to classify.",
+    )
+    parser.add_argument(
+        "--model",
+        default="models/sentiment_model.joblib",
+        help="Path to the trained model.",
+    )
+
+    args = parser.parse_args()
+
+    classifier = load_model(args.model)
+    result = predict_single_text(classifier, args.text)
+    print_prediction(result)
