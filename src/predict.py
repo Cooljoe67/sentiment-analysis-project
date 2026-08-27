@@ -1,7 +1,7 @@
 import argparse
 from typing import Any
 
-import numpyyyyyy as np
+import numpy as np
 from numpy.typing import NDArray
 from joblib import load
 
