@@ -5,6 +5,7 @@ from joblib import dump
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline, make_pipeline
 
@@ -40,8 +41,8 @@ def train_model(X_train: pd.Series, y_train: pd.Series) -> Pipeline:
     Builds and trains a classification pipeline.
     """
     clf_pipeline = make_pipeline(
-        TfidfVectorizer(min_df=1, ngram_range=(1, 2)),
-        LogisticRegression(max_iter=1000),
+        TfidfVectorizer(min_df=1, ngram_range=(1, 3)),
+        MultinomialNB(alpha=1.0),
     )
     clf_pipeline.fit(X_train, y_train)
     return clf_pipeline
@@ -52,13 +53,15 @@ def main(data_path: str, model_path: str) -> None:
     """
     df = load_and_validate_data(data_path)
     X_train, X_test, y_train, y_test = split_data(df)
-    clf = train_model(X_train, y_train)
 
-    # Evaluate and print accuracy
-    acc = clf.score(X_test, y_test)
+    # Train on training split for evaluation
+    eval_clf = train_model(X_train, y_train)
+    acc = eval_clf.score(X_test, y_test)
     print(f"Test accuracy: {acc:.3f}")
 
-    save_model(clf, model_path)
+    # Retrain on the full dataset before saving so the final model sees all examples
+    final_clf = train_model(df["text"], df["label"])
+    save_model(final_clf, model_path)
 
 def save_model(model: Pipeline, model_path: str) -> None:
     """
