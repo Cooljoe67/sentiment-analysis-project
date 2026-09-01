@@ -8,6 +8,7 @@ from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 
+
 def load_and_validate_data(data_path: str) -> pd.DataFrame:
     """
     Loads data from a CSV and ensures it has the required columns.
@@ -16,6 +17,7 @@ def load_and_validate_data(data_path: str) -> pd.DataFrame:
     if not {"text", "label"}.issubset(df.columns):
         raise ValueError("CSV must contain 'text' and 'label' columns")
     return df
+
 
 def split_data(
     df: pd.DataFrame,
@@ -57,9 +59,7 @@ def create_model() -> Pipeline:
             (
                 "classifier",
                 LogisticRegression(
-                    max_iter=1000,
-                    random_state=42,
-                    class_weight="balanced"
+                    max_iter=1000, random_state=42, class_weight="balanced"
                 ),
             ),
         ]
