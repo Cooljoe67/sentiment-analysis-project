@@ -11,7 +11,7 @@ def model():
 @pytest.mark.parametrize(
     "text, expected_label",
     [
-        ("I love this movie, it was fantastic and inspiring!", 1),
+        ("Great movie!", 1),
         ("The service was terrible and the food was awful.", 0),
     ],
 )
