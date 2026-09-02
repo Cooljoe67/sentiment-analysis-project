@@ -1,4 +1,3 @@
-import sys
 from typing import Any
 
 import numpy as np
@@ -48,8 +47,8 @@ def print_prediction(result: dict[str, Any]) -> None:
 
 
 def main() -> None:
-    """Parse CLI arguments and run prediction."""
-    text = sys.argv[1] if len(sys.argv) > 1 else "This project is awesome!"
+    """Run prediction with default text."""
+    text = "This project is awesome!"
     model_path = "models/sentiment.joblib"
 
     model = load_model(model_path)
