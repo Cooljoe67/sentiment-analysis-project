@@ -1,4 +1,4 @@
-import argparse
+import sys
 from typing import Any
 
 import numpy as np
@@ -49,23 +49,11 @@ def print_prediction(result: dict[str, Any]) -> None:
 
 def main() -> None:
     """Parse CLI arguments and run prediction."""
-    parser = argparse.ArgumentParser(description="Sentiment Analysis CLI")
-    parser.add_argument(
-        "text",
-        nargs="?",
-        default="This project is awesome!",
-        help="Text to analyze",
-    )
-    parser.add_argument(
-        "--model",
-        default="models/sentiment.joblib",
-        help="Path to trained model",
-    )
+    text = sys.argv[1] if len(sys.argv) > 1 else "This project is awesome!"
+    model_path = "models/sentiment.joblib"
 
-    args = parser.parse_args()
-
-    model = load_model(args.model)
-    result = predict_single_text(model, args.text)
+    model = load_model(model_path)
+    result = predict_single_text(model, text)
     print_prediction(result)
 
 
