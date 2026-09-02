@@ -4,7 +4,6 @@ import pandas as pd
 def process_data(df: pd.DataFrame) -> pd.DataFrame:
     """Cleans and processes the dataframe."""
 
-
     # Clean column names by stripping whitespace and converting to lower case
     df.columns = df.columns.str.strip().str.lower()
 
